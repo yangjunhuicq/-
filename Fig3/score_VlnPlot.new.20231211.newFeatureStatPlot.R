@@ -1,0 +1,61 @@
+library(Seurat)
+lung_fib.my.clean <- readRDS(file = 'COVID19_Donor_PF_COPD.fib.ana.addScore.new.20231211.rds')
+lung_fib.my.clean
+table(lung_fib.my.clean$Normal,useNA='always')
+table(lung_fib.my.clean@active.ident,useNA='always')
+lung_fib.my.clean$celltype2=gsub('Myofibroblast','MyoF',lung_fib.my.clean$celltype)
+lung_fib.my.clean$celltype2=gsub('Alveolar Fibroblast','Alv',lung_fib.my.clean$celltype2)
+lung_fib.my.clean$celltype2=gsub('Adventitial Fibroblast','Adv',lung_fib.my.clean$celltype2)
+table(lung_fib.my.clean$celltype2,useNA='always')
+lung_fib.my.clean$celltype2=factor(lung_fib.my.clean$celltype2,levels=c("Adv","Alv","MyoF"))
+lung_fib.my.clean$Normal=factor(lung_fib.my.clean$Normal,levels=c("COPD","Donor","PF","COVID19"))
+table(lung_fib.my.clean$celltype2,useNA='always')
+table(lung_fib.my.clean$Normal,useNA='always')
+library(SCP)
+library(ggplot2)
+pdf(paste0("COVID19_Donor_PF_COPD.COVID19_high.20231211n.pdf"),width=4.5,height=4)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("collagen_formationfil1","collagen_degradationfil1","collagensfil1","LAMININ_INTERACTIONSfil1"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none')
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("collagen_formationfil1"), group.by = "celltype", split.by = "Normal", bg.by = "celltype")
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("collagen_formationfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2", palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))# + scale_fill_manual(values = c("COVID19"="#3677AD","PF"="#EE7B1A","COPD"="#D5221E","Donor"="#4CA649"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("collagen_formationfil1","collagen_degradationfil1","collagensfil1","LAMININ_INTERACTIONSfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none', palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))# + scale_fill_manual(values = c("COVID19"="#3677AD","PF"="#EE7B1A","COPD"="#D5221E","Donor"="#4CA649"))
+dev.off()
+
+
+pdf(paste0("COVID19_Donor_PF_COPD.PF_high.20231211n.pdf"),width=4.5,height=4)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("DISSOLUTION_OF_FIBRIN_CLOTfil1","EMTfil1","HALLMARK_TNFA_SIGNALING_VIA_NFKBfil1"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none',ncol=2)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("DISSOLUTION_OF_FIBRIN_CLOTfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("DISSOLUTION_OF_FIBRIN_CLOTfil1","EMTfil1","HALLMARK_TNFA_SIGNALING_VIA_NFKBfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+dev.off()
+
+pdf(paste0("COVID19_Donor_PF_COPD.PF_high.per10.20231211n.pdf"),width=4.5,height=4)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("DISSOLUTION_OF_FIBRIN_CLOTfil101","EMTfil101","HALLMARK_TNFA_SIGNALING_VIA_NFKBfil101"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none',ncol=2)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("DISSOLUTION_OF_FIBRIN_CLOTfil101"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("DISSOLUTION_OF_FIBRIN_CLOTfil101","EMTfil101","HALLMARK_TNFA_SIGNALING_VIA_NFKBfil101"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+dev.off()
+
+
+pdf(paste0("COVID19_Donor_PF_COPD.COPD_high.20231211n.pdf"),width=4.5,height=4)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("KEGG_ANTIGEN_PROCESSING_AND_PRESENTATIONfil1","REACTOME_INTERFERON_GAMMA_SIGNALINGfil1","KEGG_REGULATION_OF_ACTIN_CYTOSKELETONfil1"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none',ncol=2)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("KEGG_ANTIGEN_PROCESSING_AND_PRESENTATIONfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("KEGG_ANTIGEN_PROCESSING_AND_PRESENTATIONfil1","REACTOME_INTERFERON_GAMMA_SIGNALINGfil1","KEGG_REGULATION_OF_ACTIN_CYTOSKELETONfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+dev.off()
+
+pdf(paste0("COVID19_Donor_PF_COPD.COPD_high.per10.20231211n.pdf"),width=4.5,height=4)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("KEGG_ANTIGEN_PROCESSING_AND_PRESENTATIONfil101","REACTOME_INTERFERON_GAMMA_SIGNALINGfil101","KEGG_REGULATION_OF_ACTIN_CYTOSKELETONfil101"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none',ncol=2)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("KEGG_ANTIGEN_PROCESSING_AND_PRESENTATIONfil101"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("KEGG_ANTIGEN_PROCESSING_AND_PRESENTATIONfil101","REACTOME_INTERFERON_GAMMA_SIGNALINGfil101","KEGG_REGULATION_OF_ACTIN_CYTOSKELETONfil101"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+dev.off()
+
+
+pdf(paste0("COVID19_Donor_PF_COPD.COPD_COVID19_high.20231211n.pdf"),width=4.5,height=2.5)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("REACTOME_PKMTS_METHYLATE_HISTONE_LYSINESfil1","REACTOME_CHROMATIN_MODIFYING_ENZYMESfil1"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none',ncol=2)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("REACTOME_PKMTS_METHYLATE_HISTONE_LYSINESfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("REACTOME_PKMTS_METHYLATE_HISTONE_LYSINESfil1","REACTOME_CHROMATIN_MODIFYING_ENZYMESfil1"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+dev.off()
+
+pdf(paste0("COVID19_Donor_PF_COPD.COPD_COVID19_high.per10.20231211n.pdf"),width=4.5,height=2.5)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("REACTOME_PKMTS_METHYLATE_HISTONE_LYSINESfil101","REACTOME_CHROMATIN_MODIFYING_ENZYMESfil101"), group.by = "Normal", split.by = "celltype", bg.by = "Normal",legend.position='none',ncol=2)
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("REACTOME_PKMTS_METHYLATE_HISTONE_LYSINESfil101"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+FeatureStatPlot(lung_fib.my.clean, stat.by = c("REACTOME_PKMTS_METHYLATE_HISTONE_LYSINESfil101","REACTOME_CHROMATIN_MODIFYING_ENZYMESfil101"), group.by = "celltype2", split.by = "Normal", bg.by = "celltype2",legend.position='none',ncol=2, palcolor=c("COPD"="#D5221E","Donor"="#4CA649","PF"="#EE7B1A","COVID19"="#3677AD"))
+dev.off()
+
